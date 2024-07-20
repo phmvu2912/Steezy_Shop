@@ -1,9 +1,11 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
+
 import LayoutAdmin from '../pages/(admin)/LayoutAdmin'
 import Dashboard from '../pages/(admin)/Dashboard'
 import ListProducts from '../pages/(admin)/products/List'
 import FormProduct from '../pages/(admin)/products/FormSubmit'
+import ListCategories from '../pages/(admin)/categories/List'
 
 type Props = {}
 
@@ -21,7 +23,7 @@ const Routing = (props: Props) => {
                     <Route path='/admin/products/details' element={''} />
 
                     {/* Endpoint Categories */}
-                    <Route path='/admin/categories' element={''} />
+                    <Route path='/admin/categories' element={<ListCategories />} />
                     <Route path='/admin/categories/create' element={''} />
                     <Route path='/admin/categories/update/:id' element={''} />
                 </Route>
