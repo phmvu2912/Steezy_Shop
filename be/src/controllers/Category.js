@@ -3,9 +3,27 @@ import Category from "../models/Category.js"
 // * GET ALL
 export const getCategories = async (req, res) => {
     try {
-        const result = await Category.find({});
 
-        if (result.length === 0)
+        const {
+            _page = 1,
+            _limit = 10,
+            _sort = "createdAt",
+            _order = "asc"
+        } = req.query;
+
+        const options = {
+            page: _page,
+            limit: _limit,
+            sort: {
+                [_sort]: _order === "asc" ? 1 : -1
+            }
+        }
+
+        const result = await Category.paginate({}, options);
+
+        console.log(result?.docs.length)
+
+        if (result?.docs.length === 0)
             return res
                 .status(404)
                 .json({ message: "No data available!" })
