@@ -1,15 +1,15 @@
-import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
-import LayoutAdmin from '../pages/(admin)/LayoutAdmin'
-import Dashboard from '../pages/(admin)/Dashboard'
-import ListProducts from '../pages/(admin)/products/List'
-import FormProduct from '../pages/(admin)/products/FormSubmit'
 import ListCategories from '../pages/(admin)/categories/List'
+import Dashboard from '../pages/(admin)/Dashboard'
+import LayoutAdmin from '../pages/(admin)/LayoutAdmin'
+import FormProduct from '../pages/(admin)/products/FormSubmit'
+import ListProducts from '../pages/(admin)/products/List'
+import FormSubmitCategory from '../pages/(admin)/categories/FormSubmit'
 
-type Props = {}
+// type Props = {}
 
-const Routing = (props: Props) => {
+const Routing = () => {
     return (
         <>
             <Routes>
@@ -24,8 +24,8 @@ const Routing = (props: Props) => {
 
                     {/* Endpoint Categories */}
                     <Route path='/admin/categories' element={<ListCategories />} />
-                    <Route path='/admin/categories/create' element={''} />
-                    <Route path='/admin/categories/update/:id' element={''} />
+                    <Route path='/admin/categories/create' element={<FormSubmitCategory />} />
+                    <Route path='/admin/categories/update/:id' element={<FormSubmitCategory />} />
                 </Route>
 
                 <Route path='/' element={<h1>Layout Client</h1>}>

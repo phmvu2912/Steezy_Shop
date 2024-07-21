@@ -1,4 +1,5 @@
 import Category from "../models/Category.js"
+import slugify from 'slugify'
 
 // * GET ALL
 export const getCategories = async (req, res) => {
@@ -21,15 +22,13 @@ export const getCategories = async (req, res) => {
 
         const result = await Category.paginate({}, options);
 
-        console.log(result?.docs.length)
-
         if (result?.docs.length === 0)
             return res
                 .status(404)
                 .json({ message: "No data available!" })
 
         return res.status(200).json({
-            result
+            data: result?.docs
         });
     } catch (error) {
         return res.status(500).json({ error })
@@ -57,7 +56,16 @@ export const getCategoryById = async (req, res) => {
 // * CREATE
 export const create = async (req, res) => {
     try {
-        const result = await Category.create(req.body);
+        const result = await Category.create({
+            name: req.body.name,
+            slug: slugify(req.body.name, {
+                replacement: '-',
+                lower: true,
+                strict: true,
+                locale: 'vi',
+                trim: true
+            })
+        });
 
         return res.status(201).json({
             data: result,
@@ -71,7 +79,16 @@ export const create = async (req, res) => {
 // * UPDATE BY ID
 export const updateCategoryById = async (req, res) => {
     try {
-        const result = await Category.findByIdAndUpdate(req.params.id, req.body);
+        const result = await Category.findByIdAndUpdate(req.params.id, {
+            name: req.body.name,
+            slug: slugify(req.body.name, {
+                replacement: '-',
+                lower: true,
+                strict: true,
+                locale: 'vi',
+                trim: true
+            })
+        });
 
         return res.status(204).json({
             data: result,

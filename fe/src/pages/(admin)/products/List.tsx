@@ -1,10 +1,17 @@
+import { useQuery } from '@tanstack/react-query'
 import React from 'react'
+import instance from '../../../configs/axios'
 
-type Props = {}
 
-const List = (props: Props) => {
+
+const List = () => {
+
+    
+
+
+
     return (
-        <div>List</div>
+       <>List</>
     )
 }
 
