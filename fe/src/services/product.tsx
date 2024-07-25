@@ -1,11 +1,11 @@
 import { AxiosResponse } from "axios";
-import instance from "../configs/axios"
-import { TCategoty } from "../common/types/category";
+import { TProduct } from "../common/types/product";
+import instance from "../configs/axios";
 
 // Get All
-export const getCategories = async (params?: any): Promise<AxiosResponse<any>> => {
+export const getProducts = async (params?: any): Promise<AxiosResponse<any>> => {
     try {
-        const response = await instance.get(`/categories/`, { params })
+        const response = await instance.get(`/products/`, { params })
 
         return response;
     } catch (error) {
@@ -20,9 +20,9 @@ export const getCategories = async (params?: any): Promise<AxiosResponse<any>> =
 }
 
 // Get one
-export const getCategoryById = async (id: any): Promise<AxiosResponse<any>> => {
+export const getProductById = async (id: any): Promise<AxiosResponse<any>> => {
     try {
-        const response = await instance.get(`/categories/${id}`)
+        const response = await instance.get(`/products/${id}`)
 
         return response;
     } catch (error) {
@@ -37,26 +37,9 @@ export const getCategoryById = async (id: any): Promise<AxiosResponse<any>> => {
 }
 
 // Remove
-export const removeCategoryById = async (category: TCategoty): Promise<AxiosResponse<any>> => {
+export const removeProductById = async (product: TProduct): Promise<AxiosResponse<any>> => {
     try {
-        const response = await instance.delete(`/categories/${category._id}`)
-
-        return response;
-    } catch (error) {
-        return {
-            data: null,
-            status: 500,
-            statusText: 'Internal Server Error',
-            headers: {},
-            config: {} as any,
-        }
-    }
-}
-
-// Update
-export const updateCategoryById = async (category: TCategoty): Promise<AxiosResponse<any>> => {
-    try {
-        const response = await instance.put(`/categories/${category._id}`, category)
+        const response = await instance.delete(`/products/${product._id}`)
 
         return response;
     } catch (error) {
@@ -71,9 +54,26 @@ export const updateCategoryById = async (category: TCategoty): Promise<AxiosResp
 }
 
 // Create
-export const createCategory = async (category: TCategoty): Promise<AxiosResponse<any>> => {
+export const createProduct = async (product: TProduct): Promise<AxiosResponse<any>> => {
     try {
-        const response = await instance.post(`/categories`, category)
+        const response = await instance.post(`/products`, product)
+
+        return response;
+    } catch (error) {
+        return {
+            data: null,
+            status: 500,
+            statusText: 'Internal Server Error',
+            headers: {},
+            config: {} as any,
+        }
+    }
+}
+
+// Update
+export const updateProductById = async (product: TProduct): Promise<AxiosResponse<any>> => {
+    try {
+        const response = await instance.put(`/products/${product._id}`, product)
 
         return response;
     } catch (error) {

@@ -1,12 +1,11 @@
-import { Loading3QuartersOutlined, PlusOutlined, RollbackOutlined } from '@ant-design/icons';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { RollbackOutlined } from '@ant-design/icons';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button, message } from 'antd';
-import React, { useEffect } from 'react'
-import { useForm } from 'react-hook-form';
-import { Link, useParams } from 'react-router-dom'
-import instance from '../../../configs/axios';
-import { createCategory, getCategoryById, updateCategoryById } from '../../../services/category';
+import { useEffect } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
+import { Link, useParams } from 'react-router-dom';
 import { TCategoty } from '../../../common/types/category';
+import { createCategory, getCategoryById, updateCategoryById } from '../../../services/category';
 
 const FormSubmit = () => {
 
@@ -16,7 +15,9 @@ const FormSubmit = () => {
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm<TCategoty>()
 
+    
 
+    
     //! Fetch API by Id
     const { data, isLoading } = useQuery({
         queryKey: ['category', id],
@@ -92,9 +93,16 @@ const FormSubmit = () => {
                                 type="text"
                                 className="border border-black-500 text-sm rounded-lg fo cus:ring-green-500 block w-full p-2.5"
                                 placeholder="Nhập tên danh mục"
-                                {...register('name')}
+                                {...register('name', { required: true, maxLength: 50 })}
                             />
-                            {/* <p className="mt-2 text-sm text-red-600 dark:text-red-500"><span className="font-medium">Oops!</span> Username already taken!</p> */}
+                            {/* Required error */}
+                            {errors.name && errors.name.type === "required" && (
+                                <p className="mt-2 text-sm text-red-600 dark:text-red-500"><span className="font-medium">Oops!</span> Tên danh mục không được bỏ trống!</p>
+                            )}
+                            {/* Max Length error */}
+                            {errors.name && errors.name.type === "maxLength" && (
+                                <p className="mt-2 text-sm text-red-600 dark:text-red-500"><span className="font-medium">Oops!</span> Tên danh mục không được phép vượt quá 5 ký tự!</p>
+                            )}
                         </div>
                     </div>
 

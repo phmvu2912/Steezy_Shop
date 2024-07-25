@@ -1,8 +1,10 @@
 import Category from "../models/Category.js"
 import slugify from 'slugify'
+import { errors } from '@vinejs/vine'
+import { categoryValidation } from "../validation/CategoryValidation.js";
 
 // * GET ALL
-export const getCategories = async (req, res) => {
+const getCategories = async (req, res) => {
     try {
 
         const {
@@ -36,7 +38,7 @@ export const getCategories = async (req, res) => {
 }
 
 // * GET ONE
-export const getCategoryById = async (req, res) => {
+const getCategoryById = async (req, res) => {
     try {
         const result = await Category.findById(req.params.id);
 
@@ -46,7 +48,7 @@ export const getCategoryById = async (req, res) => {
                 .json({ message: "No data available!" })
 
         return res.status(200).json({
-            result
+            data: result
         });
     } catch (error) {
         return res.status(500).json({ error })
@@ -54,9 +56,10 @@ export const getCategoryById = async (req, res) => {
 }
 
 // * CREATE
-export const create = async (req, res) => {
+const createCategory = async (req, res) => {
     try {
-        const result = await Category.create({
+
+        const output = await categoryValidation.validate({
             name: req.body.name,
             slug: slugify(req.body.name, {
                 replacement: '-',
@@ -65,21 +68,28 @@ export const create = async (req, res) => {
                 locale: 'vi',
                 trim: true
             })
-        });
+        })
+
+        const result = await Category.create(output);
 
         return res.status(201).json({
             data: result,
             message: 'Created Successfully!'
         });
     } catch (error) {
-        return res.status(500).json({ error })
+        if (error instanceof errors.E_VALIDATION_ERROR) {
+            console.log(error.messages)
+        }
+
+        return res.status(500).json(error)
     }
 }
 
 // * UPDATE BY ID
-export const updateCategoryById = async (req, res) => {
+const updateCategoryById = async (req, res) => {
     try {
-        const result = await Category.findByIdAndUpdate(req.params.id, {
+
+        const output = await categoryValidation.validate({
             name: req.body.name,
             slug: slugify(req.body.name, {
                 replacement: '-',
@@ -88,19 +98,26 @@ export const updateCategoryById = async (req, res) => {
                 locale: 'vi',
                 trim: true
             })
-        });
+        })
+
+        const result = await Category.findByIdAndUpdate(req.params.id, output);
 
         return res.status(204).json({
             data: result,
             message: 'Updated Successfully!'
         });
     } catch (error) {
+
+        if (error instanceof errors.E_VALIDATION_ERROR) {
+            console.log(error.messages)
+        }
+        
         return res.status(500).json({ error })
     }
 }
 
 // * DELETE BY ID
-export const deleteCategoryById = async (req, res) => {
+const deleteCategoryById = async (req, res) => {
     try {
         const idCategory = req.params.id;
 
@@ -115,3 +132,5 @@ export const deleteCategoryById = async (req, res) => {
         return res.status(500).json({ error })
     }
 }
+
+export { getCategories, getCategoryById, createCategory, updateCategoryById, deleteCategoryById }

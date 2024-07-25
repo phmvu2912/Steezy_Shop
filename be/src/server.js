@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import multer from 'multer'
+import morgan from 'morgan'
 
 import connectDB from './connect.js';
 import router from './routes/index.js';
@@ -10,8 +11,16 @@ import router from './routes/index.js';
 const app = express();
 
 //Middlewares
+app.use(morgan('tiny'))
+
 dotenv.config();
 app.use(cors());
+
+app.use(
+    express.urlencoded({ extended: true })
+);
+    
+app.use(express.json());
 
 // bodyParser
 app.use(bodyParser.json());

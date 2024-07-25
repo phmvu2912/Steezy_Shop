@@ -9,7 +9,6 @@ const categorySchema = new Schema({
     slug: {
         type: String,
         required: true,
-        unique: true
     }
 },
     { timestamps: true, versionKey: false }

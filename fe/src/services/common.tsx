@@ -1,5 +1,6 @@
 import { AxiosResponse } from "axios";
 import instance from "../configs/axios";
+import moment from "moment-timezone";
 
 export const remove = async (endPoint: string, params: any): Promise<AxiosResponse<any>> => {
     try {
@@ -24,4 +25,10 @@ export const remove = async (endPoint: string, params: any): Promise<AxiosRespon
             config: {} as any,
         }
     }
+}
+
+export const convertTimestampToGMT7 = (timestamp: string) => {
+    const time = moment(timestamp).tz('Asia/Bangkok').format('DD-MM-YYYY | HH:mm:ss');
+    
+    return time;
 }

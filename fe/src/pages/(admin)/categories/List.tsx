@@ -4,6 +4,7 @@ import { Button, message, Popconfirm, Spin, Table } from 'antd'
 import { Link } from 'react-router-dom'
 import { TCategoty } from '../../../common/types/category'
 import { getCategories, removeCategoryById } from '../../../services/category'
+import { convertTimestampToGMT7 } from '../../../services/common'
 
 const List = () => {
     const [messageApi, contextHolder] = message.useMessage();
@@ -46,6 +47,8 @@ const List = () => {
     // ! UI configs
     const dataSource = data?.data?.data?.map((item: TCategoty, index: number) => ({
         key: <div className="font-bold">{index + 1}</div>,
+        created: convertTimestampToGMT7(item.createdAt),
+        updated: convertTimestampToGMT7(item.updatedAt),
         ...item
     }))
 
@@ -64,6 +67,16 @@ const List = () => {
             title: 'Slug',
             dataIndex: 'slug',
             key: 'slug',
+        },
+        {
+            title: 'Ngày tạo',
+            dataIndex: 'created',
+            key: 'created',
+        },
+        {
+            title: 'Ngày cập nhật',
+            dataIndex: 'updated',
+            key: 'updated',
         },
         {
             title: <div className='text-center'>Tools</div>,

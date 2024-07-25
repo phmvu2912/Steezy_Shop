@@ -1,13 +1,12 @@
 import mongoose, { Schema } from "mongoose";
 
-const productSchema = Schema({
+const productSchema = new Schema({
     title: {
         type: String,
         required: true
     },
     thumbnail: {
         type: String,
-        required: true
     },
     images: Array,
     price: {
@@ -23,11 +22,14 @@ const productSchema = Schema({
         required: true
     },
     stock: {
-        type: number,
+        type: Number,
         required: true
     },
     rating: Number,
-
+    slug: {
+        type: String,
+        required: true,
+    },
     description: String
 },
     { timestamps: true, versionKey: false }
