@@ -1,16 +1,21 @@
+import { GiftOutlined, HeartOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
+import { Button, Form, Image, InputNumber, Spin, Tabs, TabsProps } from 'antd';
 import { Link, useParams } from 'react-router-dom';
-import { getProductById } from '../../../services/product';
-import { HeartOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
-import styles from '../styles/detailsP.module.scss'
 import { TProduct } from '../../../common/types/product';
-import { Tabs, TabsProps } from 'antd';
+import { getProductById } from '../../../services/product';
+import styles from '../styles/detailsP.module.scss';
+import { useState } from 'react';
 
 
 const Details = () => {
 
     const { id } = useParams();
 
+    const [spinning, setSpinning] = useState(false);
+    const [percent, setPercent] = useState(0);
+
+    const [quantity, setQuantity] = useState(1);
 
 
     const { data: product, isError, error, isFetching, isLoading } = useQuery({
@@ -36,11 +41,12 @@ const Details = () => {
     //     console.log(key);
     // };
 
+    //* UI configs
     const items: TabsProps['items'] = [
         {
             key: '1',
             label: 'Mô tả sản phẩm',
-            children: <p className='text-xl text-justify py-3'>{detailsProduct?.description}</p>,
+            children: <p className='text-lg text-justify py-3'>{detailsProduct?.description}</p>,
         },
         {
             key: '2',
@@ -49,18 +55,47 @@ const Details = () => {
         }
     ];
 
+    // console.log(detailsProduct?.images)
+
+    // const showLoader = () => {
+    //     setSpinning(true);
+    //     let ptg = -10;
+
+    //     const interval = setInterval(() => {
+    //         ptg += 5;
+    //         setPercent(ptg);
+
+    //         if (ptg > 120) {
+    //             clearInterval(interval);
+    //             setSpinning(false);
+    //             setPercent(0);
+    //         }
+    //     }, 100);
+    // };
 
     return (
         <>
+            {isLoading && isFetching ? (
+                <Spin spinning fullscreen />
+            ) : ('')}
             <div className="container mx-auto">
                 <div className={styles.mainContent}>
                     <div className={styles.left}>
                         <div className={styles.imgs}>
-                            <img src="https://picsum.photos/200/300" alt="" className={styles.img} />
-                            <img src="https://picsum.photos/200/300" alt="" className={styles.img} />
-                            <img src="https://picsum.photos/200/300" alt="" className={styles.img} />
-                            <img src="https://picsum.photos/200/300" alt="" className={styles.img} />
-                            <img src="https://picsum.photos/200/300" alt="" className={styles.img} />
+                            <Image.PreviewGroup
+
+                                preview={{
+                                    onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
+                                }}
+
+                            >
+                                {
+                                    detailsProduct?.images?.map((img: any, index: number) => (
+
+                                        <Image src={img} alt={detailsProduct.title} key={index} placeholder />
+                                    ))
+                                }
+                            </Image.PreviewGroup>
                         </div>
                     </div>
 
@@ -72,7 +107,7 @@ const Details = () => {
                         <div className={styles.info}>
                             <div className={styles.category}>
                                 <span className='font-semibold'>Loại sản phẩm: </span>
-                                <Link to={''} className='hover:underline'>{detailsProduct?.category.name}</Link>
+                                <Link to={''} className='hover:underline'>{detailsProduct?.category?.name}</Link>
                             </div>
 
                             <div className={styles.rating}>
@@ -86,18 +121,49 @@ const Details = () => {
 
                             <del className='text-gray-500 text-xl'>${detailsProduct?.price}</del>
                         </div>
-                    </div>
+                        <Form
+                            // labelCol={{ span: 4 }}
+                            // wrapperCol={{ span: 14 }}
+                            // layout="horizontal"
+                            // disabled={componentDisabled}
+                            style={{ marginTop: 28 }}
+                            size='large'
+                        >
 
+                            <Form.Item label="Số lượng" name='quantity' className='font-semibold m-0 p-0 flex-1'
+                            // rules={[
+                            //     { type: 'integer', message: `Chỉ được phép chứa ký tự số và số lượng không được phép vượt quá ${detailsProduct?.stock}` },
+
+                            // ]}
+                            >
+                                <InputNumber min={1} max={detailsProduct?.stock} value={quantity} />
+                            </Form.Item>
+
+                            <div className="flex justify-between items-center space-x-4 my-7">
+                                <Button type='customize' size='large' className='bg-[#292524] text-white p-4 flex-1 hover:bg-[#A8A29E] hover:text-black'>Thêm vào giỏ hàng <ShoppingCartOutlined /></Button>
+                                <Button type='customize' size='large' className='bg-[#292524] text-white p-4 flex-1 hover:bg-[#A8A29E] hover:text-black'>Mua ngay <ShoppingCartOutlined /></Button>
+                            </div>
+                        </Form>
+
+                        <div className={styles.services}>
+                            <div className="flex items-center space-x-4 text-lg">
+                            <i className="fa-solid fa-gift text-2xl"></i> <p className='text-justify'>Freeship cho tổng hóa đơn trên 100$</p>
+                            </div>
+
+                            <div className="flex items-center space-x-4 text-lg">
+                                <i className="fa-solid fa-truck text-2xl"></i> <p className='text-justify'>Giao hàng 1 - 2 ngày khu vực nội thành</p>
+                            </div>
+
+                            <div className="flex items-center space-x-4 text-lg">
+                            <i className="fa-solid fa-headset text-2xl"></i> <p className='text-justify'>Hỗ trợ tư vấn 24/7</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="tabs my-10">
-                    <Tabs defaultActiveKey="1" items={items} size='large' centered />
+                    <Tabs defaultActiveKey="1" items={items} size='large' centered type='customize' className='active:text-black'/>
                 </div>
-
-
-
-
-
 
                 {/* Danh sách xem gần đây */}
                 <section className={styles.listWatched}>
@@ -114,7 +180,7 @@ const Details = () => {
                                         <div className={styles.fav} onClick={() => alert('hi')}>
                                             <HeartOutlined />
                                         </div>
-                                        <div className={styles.action}>
+                                        {/* <div className={styles.action}>
                                             <div className={styles.prev}>
                                                 <div className={styles.act}>
                                                     <LeftOutlined />
@@ -126,15 +192,18 @@ const Details = () => {
                                                     <RightOutlined />
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> */}
 
                                         {/* Ảnh sản phẩm */}
-                                        <img src={item.thumbnail ? `${item.thumbnail}` : 'https://picsum.photos/200/300'} />
+                                        <img
+                                            src={item.thumbnail ? item.thumbnail : (item.images && item.images.length > 0 ? item.images[0] : '')}
+                                            alt={item.title}
+                                        />
 
                                         {/* Thông tin sản phẩm */}
                                         <div className={styles.info}>
                                             <p className={styles.title}>{item.title}</p>
-                                            <p>${item.discount}</p>
+                                            <p className='font-semibold'>${item.discount}</p>
                                         </div>
                                     </div>
                                     {/* </Link> */}

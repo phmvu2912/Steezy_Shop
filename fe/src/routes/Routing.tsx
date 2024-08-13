@@ -15,6 +15,9 @@ import ListProducts from '../pages/(client)/products/List'
 import DetailsProduct from '../pages/(client)/products/Details'
 
 import FormSubmitAuth from '../pages/Auth/FormSubmit'
+import Test from '../pages/Test'
+import DetailsCategory from '../pages/(client)/categories/Details'
+import WishList from '../pages/(client)/wishlist/List'
 
 // type Props = {}
 
@@ -48,14 +51,18 @@ const Routing = () => {
 
                     {/* Endpoint Categories */}
                     <Route path='/categories' element={''} />
-                    <Route path='/categories/create' element={''} />
+                    <Route path='/categories/:id' element={<DetailsCategory />} />
                     <Route path='/categories/update/:id' element={''} />
+
+                    <Route path='/wishlist' element={<WishList />}/> 
                 </Route>
 
 
                 {/* Auth routing */}
                 <Route path='/login' element={<FormSubmitAuth />} />
                 <Route path='/register' element={<FormSubmitAuth />} />
+
+                <Route path='/test' element={<Test />} />
 
                 <Route path='*' element={<NotFound />} />
             </Routes>

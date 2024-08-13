@@ -14,6 +14,7 @@ const app = express();
 app.use(morgan('tiny'))
 
 dotenv.config();
+
 app.use(cors());
 
 app.use(

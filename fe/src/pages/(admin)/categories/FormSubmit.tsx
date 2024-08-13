@@ -15,9 +15,9 @@ const FormSubmit = () => {
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm<TCategoty>()
 
-    
 
-    
+
+
     //! Fetch API by Id
     const { data, isLoading } = useQuery({
         queryKey: ['category', id],
@@ -25,20 +25,23 @@ const FormSubmit = () => {
         enabled: !!id
     })
 
+    // console.log(data?.data?.data)
 
     //! Fill data
     if (id) {
         useEffect(() => {
             if (data && !isLoading) {
-                const detail = data.data?.result;
+                const detail = data?.data?.data;
                 reset(detail);
             }
-        }, [data, isLoading, reset]);
+        }, []);
 
     }
 
     const onSubmit = async (dataForm: TCategoty) => {
         try {
+            // return console.log(dataForm)
+
             if (dataForm._id) {
                 console.log('Update')
                 const { status } = await updateCategoryById(dataForm);

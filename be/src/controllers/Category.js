@@ -40,20 +40,20 @@ const getCategories = async (req, res) => {
 // * GET ONE
 const getCategoryById = async (req, res) => {
     try {
-        const result = await Category.findById(req.params.id);
+        const result = await Category.findById(req.params.id).populate('products').exec();
 
-        if (result.length === 0)
+        if (!result) // Kiểm tra xem category có tồn tại hay không
             return res
                 .status(404)
-                .json({ message: "No data available!" })
+                .json({ message: "No data available!" });
 
         return res.status(200).json({
             data: result
         });
     } catch (error) {
-        return res.status(500).json({ error })
+        return res.status(500).json({ error });
     }
-}
+};
 
 // * CREATE
 const createCategory = async (req, res) => {

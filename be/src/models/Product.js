@@ -30,7 +30,11 @@ const productSchema = new Schema({
         type: String,
         required: true,
     },
-    description: String
+    description: String,
+    isFavorite: {
+        type: Boolean,
+        default: false
+    }
 },
     { timestamps: true, versionKey: false }
 );

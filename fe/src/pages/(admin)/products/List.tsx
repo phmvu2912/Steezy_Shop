@@ -21,11 +21,11 @@ const List = () => {
     const { mutate } = useMutation({
         mutationFn: async (product: TProduct) => {
             try {
-               const res = await removeProductById(product);
+                const res = await removeProductById(product);
 
-                
 
-                if(res.status !== 200) return messageApi.open({
+
+                if (res.status !== 200) return messageApi.open({
                     type: 'error',
                     content: `Xóa thất bại, thử lại sau...!`,
                 });
@@ -61,8 +61,8 @@ const List = () => {
     // ! UI configs
     const dataSource = data?.data?.data?.map((item: TProduct, index: number) => ({
         key: <div className="font-bold">{index + 1}</div>,
-        categoryName: item.category.name,
-        thumbnailPath: item.thumbnail,
+        categoryName: item?.category?.name,
+        thumbnailPath: item?.thumbnail,
         created: convertTimestampToGMT7(item.createdAt),
         updated: convertTimestampToGMT7(item.updatedAt),
         ...item
@@ -86,9 +86,9 @@ const List = () => {
         },
         {
             title: 'Ảnh sản phẩm',
-            dataIndex: 'thumbnailPath',
-            key: 'thumbnailPath',
-            render: (text: any, item: any) => <img src={item.thumbnail} alt={item.title} />
+            dataIndex: 'images',
+            key: 'images',
+            render: (text: any, item: any) => <img src={item.images[0]} alt={item.title} width={100}/>
         },
         {
             title: 'Giá gốc',

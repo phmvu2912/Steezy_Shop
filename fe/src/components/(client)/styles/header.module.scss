@@ -4,7 +4,7 @@
     top: 0;
     width: 100%;
     z-index: 10000;
-    padding: 10px 0;
+    padding: 5px 0;
     background-color: #fff;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 
@@ -32,6 +32,10 @@
                 gap: 0.7rem;
                 display: flex;
                 align-items: center;
+                
+                p {
+                    padding-bottom: 2px;
+                }
             }
         }
 
@@ -41,6 +45,8 @@
             .logo {
                 font-weight: 500;
                 font-size: 2.5em;
+                margin: 0;
+                padding: 0;
             }
         }
 

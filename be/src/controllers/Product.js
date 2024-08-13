@@ -8,12 +8,28 @@ import { productValidation } from "../validation/ProductValidation.js";
 const getProducts = async (req, res) => {
     try {
 
-        const products = await Product.find().populate('category');
+        const { query, minPrice, maxPrice, sort } = req.query;
+
+        // Tạo bộ lọc tìm kiếm
+        const filter = {
+            $and: [
+                query ? {
+                    $or: [
+                        { title: { $regex: query, $options: 'i' } },
+                    ]
+                } : {}
+            ]
+        };
+
+                
+
+        const products = await Product.find(filter).populate('category');
 
         if (products.length === 0) return res.status(404).json({ data: [], message: 'No data found!!' });
 
         return res.status(200).json({
-            data: products
+            data: products,
+            message: `${products.length} records have been found`
         })
 
     } catch (error) {
@@ -111,7 +127,7 @@ const updateProductById = async (req, res) => {
     }
 }
 
-// * DELETE BY ID
+//! DELETE BY ID
 const deleteProductById = async (req, res) => {
     try {
 
@@ -125,5 +141,7 @@ const deleteProductById = async (req, res) => {
         return res.status(500).json({ error })
     }
 }
+
+
 
 export { createProduct, deleteProductById, getProductById, getProducts, updateProductById };

@@ -9,4 +9,5 @@ routeProduct.post('/', createProduct) // Create one
 routeProduct.delete('/:id', deleteProductById) // Delete One
 routeProduct.put('/:id', updateProductById) // Update One
 
+
 export default routeProduct
